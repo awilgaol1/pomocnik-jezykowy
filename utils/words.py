@@ -1,8 +1,9 @@
 import re
 
-def extract_and_normalize(text: str):
+def extract_and_normalize(text: str, lang: str | None = None):
     """
     Wyciąga słowa z tekstu i normalizuje je do małych liter.
+    Parametr `lang` jest opcjonalny (na przyszłość), obecnie nieużywany.
     Obsługuje języki europejskie (litery A–Z + akcenty).
     """
     if not text:

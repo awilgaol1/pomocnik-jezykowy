@@ -375,36 +375,36 @@ with tab5:
     st.header("Nagrywanie i rozpoznawanie mowy (STT)")
 
     # Pamięć rozpoznanego tekstu
-if "stt_text" not in st.session_state:
-    st.session_state.stt_text = ""
+    if "stt_text" not in st.session_state:
+        st.session_state.stt_text = ""
 
-if not st.session_state.api_key:
-    st.error("Brak klucza API.")
-else:
-    st.subheader("🎤 Nagrywanie audio")
-
-    # Streamlit Cloud NIE obsługuje st.audio_input, więc sprawdzamy, czy funkcja istnieje
-    if hasattr(st, "audio_input"):
-        audio_data = st.audio_input("Nagraj swoją wypowiedź:")
+    if not st.session_state.api_key:
+        st.error("Brak klucza API.")
     else:
-        st.info("Nagrywanie audio nie jest dostępne w Streamlit Cloud.")
-        audio_data = None
+        st.subheader("🎤 Nagrywanie audio")
 
-    # Jeśli nagranie istnieje, pokaż audio player
-    if audio_data is not None:
-        st.audio(audio_data)
+        # Streamlit Cloud NIE obsługuje st.audio_input, więc sprawdzamy, czy funkcja istnieje
+        if hasattr(st, "audio_input"):
+            audio_data = st.audio_input("Nagraj swoją wypowiedź:")
+        else:
+            st.info("Nagrywanie audio nie jest dostępne w Streamlit Cloud.")
+            audio_data = None
 
-        if st.button("Zamień nagranie na tekst"):
-            audio_bytes = audio_data.read()
-            text, err = speech_to_text(
-                api_key=st.session_state.api_key,
-                audio_bytes=audio_bytes,
-                language="pl"
-            )
-            if err:
-                st.error(err)
-            else:
-                st.session_state.stt_text = text  # ZAPIS DO PAMIĘCI
+        # Jeśli nagranie istnieje, pokaż audio player
+        if audio_data is not None:
+            st.audio(audio_data)
+
+            if st.button("Zamień nagranie na tekst"):
+                audio_bytes = audio_data.read()
+                text, err = speech_to_text(
+                    api_key=st.session_state.api_key,
+                    audio_bytes=audio_bytes,
+                    language="pl"
+                )
+                if err:
+                    st.error(err)
+                else:
+                    st.session_state.stt_text = text  # ZAPIS DO PAMIĘCI
 
     # Wyświetlanie zapamiętanego tekstu
     st.subheader("Rozpoznany tekst:")

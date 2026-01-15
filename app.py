@@ -157,16 +157,11 @@ with tab1:
     if "words_lang" not in st.session_state:
         st.session_state.words_lang = None
 
-
-    # Inicjalizacja pamięci
-    if "translation" not in st.session_state:
-        st.session_state.translation = ""
-    if "words" not in st.session_state:
-        st.session_state.words = []
-
     col1, col2 = st.columns(2)
 
+    # ---------------------------------------------------------
     # LEWA KOLUMNA — wejście
+    # ---------------------------------------------------------
     with col1:
         text = st.text_area("Tekst do tłumaczenia:", height=200)
 
@@ -186,6 +181,9 @@ with tab1:
             elif not st.session_state.api_key:
                 st.error("Brak klucza API.")
             else:
+                # ------------------------------
+                # TŁUMACZENIE
+                # ------------------------------
                 with st.spinner("Tłumaczę..."):
                     st.session_state.translation = translate_text(
                         api_key=st.session_state.api_key,
@@ -197,7 +195,9 @@ with tab1:
                         force_word=False
                     )
 
+                # ------------------------------
                 # WYBÓR ŹRÓDŁA SŁÓWEK
+                # ------------------------------
                 if extract_mode == "Z tekstu źródłowego":
                     words_text = text
                     st.session_state.words_lang = src
@@ -205,50 +205,67 @@ with tab1:
                     words_text = st.session_state.translation
                     st.session_state.words_lang = tgt
 
+                # ------------------------------
                 # WYCIĄGANIE SŁÓWEK
+                # ------------------------------
                 with st.spinner("Wyciągam słówka..."):
                     try:
-                        st.session_state.words = extract_and_normalize(words_text, st.session_state.words_lang)
+                        st.session_state.words = extract_and_normalize(
+                            words_text,
+                            st.session_state.words_lang
+                        )
                     except Exception as e:
                         st.error(f"Błąd ekstrakcji słówek: {e}")
                         st.session_state.words = []
 
+    # ---------------------------------------------------------
     # PRAWA KOLUMNA — wyniki
-with col2:
-    st.subheader("Tłumaczenie:")
-    if st.session_state.translation:
-        st.write(st.session_state.translation)
-    else:
-        st.info("Brak tłumaczenia.")
+    # ---------------------------------------------------------
+    with col2:
+        st.subheader("Tłumaczenie:")
+        if st.session_state.translation:
+            st.write(st.session_state.translation)
+        else:
+            st.info("Brak tłumaczenia.")
 
-    st.subheader("Wyciągnięte słówka:")
-    if st.session_state.words:
-        with st.form("add_words_form"):
-            selected_words = st.multiselect(
-                "Wybierz słówka do dodania:",
-                sorted(st.session_state.words)
-            )
-            submit_words = st.form_submit_button("Dodaj wybrane słówka do fiszek")
+        st.subheader("Wyciągnięte słówka:")
+        if st.session_state.words:
 
-        if submit_words and selected_words:
-            for w in selected_words:
-                translated = translate_text(
-                    api_key=st.session_state.api_key,
-                    text=w,
-                    source_lang=src,
-                    target_lang=tgt,
-                    translation_style="Naturalne",
-                    formality="Neutralny",
-                    force_word=True
+            with st.form("add_words_form"):
+                selected_words = st.multiselect(
+                    "Wybierz słówka do dodania:",
+                    sorted(st.session_state.words)
                 )
-                add_flashcard(w, translated, tgt)
+                submit_words = st.form_submit_button("Dodaj wybrane słówka do fiszek")
 
-            st.success(f"Dodano {len(selected_words)} słówek.")
-    else:
-        st.info("Brak słówek do wyświetlenia.")
+            # ---------------------------------------------------------
+            # DODAWANIE SŁÓWEK DO FISZEK (POPRAWIONA LOGIKA)
+            # ---------------------------------------------------------
+            if submit_words and selected_words:
+                for w in selected_words:
+
+                    # język słówka (np. angielski)
+                    source_lang = st.session_state.words_lang
+
+                    # język użytkownika (np. polski)
+                    target_lang = st.session_state.default_source_lang
+
+                    translated = translate_text(
+                        api_key=st.session_state.api_key,
+                        text=w,
+                        source_lang=source_lang,
+                        target_lang=target_lang,
+                        force_word=True
+                    )
+
+                    add_flashcard(w, translated, target_lang)
+
+                st.success(f"Dodano {len(selected_words)} słówek.")
+
+        else:
+            st.info("Brak słówek do wyświetlenia.")
 
 
-# ---------------------------------------------------------
 # ---------------------------------------------------------
 # TAB 2 — FISZKI
 # ---------------------------------------------------------

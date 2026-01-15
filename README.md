@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🧠 Pomocnik Językowy — aplikacja do nauki języków (Streamlit)
 
 Aplikacja łączy **tłumaczenie**, **fiszki**, **powtórki SM‑2**, **quizy**, **synonimy**, **TTS**, **STT** i wiele innych funkcji w jednym miejscu.  
@@ -52,3 +53,7 @@ Została stworzona w Pythonie z użyciem **Streamlit** oraz API OpenAI.
 ```bash
 git clone https://github.com/<twoj-login>/pomocnik-jezykowy.git
 cd pomocnik-jezykowy
+=======
+# pomocnik-jezykowy
+aplikacja pomocna w tłumaczeniach i nauce języków obcych
+>>>>>>> 9ffb25ac479f65df635089c63b79770e213a2ec8

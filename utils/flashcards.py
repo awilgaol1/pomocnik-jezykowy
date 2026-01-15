@@ -45,6 +45,10 @@ def init_db():
 # FISZKI — DODAWANIE
 # ---------------------------------------------------------
 def add_flashcard(word, translation, language):
+    # Jeśli tłumaczenie jest identyczne jak słowo wejściowe → nie zapisujemy
+    if translation.strip().lower() == word.strip().lower():
+        return
+
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
@@ -57,7 +61,6 @@ def add_flashcard(word, translation, language):
 
     conn.commit()
     conn.close()
-
 
 # ---------------------------------------------------------
 # FISZKI — POBIERANIE WSZYSTKICH

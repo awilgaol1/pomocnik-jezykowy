@@ -27,7 +27,7 @@ def init_db():
         )
     """)
 
-    # NOWA tabela trudnych słówek
+    # Tabela trudnych słówek
     cur.execute("""
         CREATE TABLE IF NOT EXISTS hard_words (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -42,11 +42,29 @@ def init_db():
 
 
 # ---------------------------------------------------------
-# FISZKI — DODAWANIE
+# FISZKI — SPRAWDZANIE, CZY SŁÓWKO JUŻ ISTNIEJE
+# ---------------------------------------------------------
+def flashcard_exists(word):
+    conn = sqlite3.connect(DB_PATH)
+    cur = conn.cursor()
+
+    cur.execute("SELECT 1 FROM flashcards WHERE word = ?", (word,))
+    exists = cur.fetchone() is not None
+
+    conn.close()
+    return exists
+
+
+# ---------------------------------------------------------
+# FISZKI — DODAWANIE (Z BLOKADĄ DUPLIKATÓW)
 # ---------------------------------------------------------
 def add_flashcard(word, translation, language):
     # Jeśli tłumaczenie jest identyczne jak słowo wejściowe → nie zapisujemy
     if translation.strip().lower() == word.strip().lower():
+        return
+
+    # Jeśli słowo już istnieje → nie dodajemy duplikatu
+    if flashcard_exists(word):
         return
 
     conn = sqlite3.connect(DB_PATH)
@@ -61,6 +79,7 @@ def add_flashcard(word, translation, language):
 
     conn.commit()
     conn.close()
+
 
 # ---------------------------------------------------------
 # FISZKI — POBIERANIE WSZYSTKICH
@@ -136,7 +155,6 @@ def delete_flashcard(cid):
 # TRUDNE SŁÓWKA — DODAWANIE
 # ---------------------------------------------------------
 def add_hard_word(word, correct_translation):
-    """Dodaje trudne słowo do tabeli hard_words, jeśli jeszcze go tam nie ma."""
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 
@@ -163,7 +181,6 @@ def add_hard_word(word, correct_translation):
 # TRUDNE SŁÓWKA — POBIERANIE
 # ---------------------------------------------------------
 def get_hard_words():
-    """Zwraca listę trudnych słówek z bazy."""
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
 

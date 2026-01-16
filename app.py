@@ -305,6 +305,22 @@ with tab2:
                         delete_flashcard(cid)
                         st.success("Usunięto.")
 
+        # ---------------------------------------------------------
+        # EKSPORT DO CSV — minimalny, bez zmian w logice
+        # ---------------------------------------------------------
+        import pandas as pd
+
+        if cards:
+            df = pd.DataFrame(cards, columns=["ID", "Słowo", "Tłumaczenie", "Język", "Poziom", "Data utworzenia"])
+            csv_data = df.to_csv(index=False).encode("utf-8")
+
+            st.download_button(
+                label="📥 Pobierz fiszki jako CSV",
+                data=csv_data,
+                file_name="fiszki.csv",
+                mime="text/csv"
+            )
+
         st.markdown("---")
         st.subheader("Dodaj fiszkę ręcznie")
 

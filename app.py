@@ -137,6 +137,7 @@ tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
     "Nagrywanie + STT",
     "TTS",
     "Synonimy / antonimy",
+    "O autorce",
     "Ustawienia"
 ])
 
@@ -488,10 +489,63 @@ with tab7:
                 st.write(ant if ant else "(brak)")
 
 # ---------------------------------------------------------
-# TAB 8 — INFORMACJE
+# TAB 8 — O AUTORCE
 # ---------------------------------------------------------
 
 with tab8:
+    st.header("👩‍💻 O autorce — Anna Wilga")
+
+    st.markdown("""
+    ### Kim jestem?
+    Nazywam się **Anna Wilga** i od lat pasjonuję się nauką języków, technologią oraz tworzeniem narzędzi,
+    które realnie pomagają ludziom rozwijać swoje umiejętności.  
+    Łączę podejście analityczne z kreatywnością — dlatego powstała ta aplikacja.
+
+    ---
+
+    ### Dlaczego stworzyłam tę aplikację?
+    Przez lata korzystałam z wielu narzędzi do nauki języków, ale żadne nie dawało mi pełnej kontroli,
+    przejrzystości i możliwości łączenia:
+    - tłumaczenia,
+    - fiszek,
+    - quizów,
+    - synonimów,
+    - wymowy,
+    - nagrywania i analizy mowy.
+
+    Chciałam stworzyć **jedno miejsce**, które:
+    - jest intuicyjne,
+    - działa szybko,
+    - daje użytkownikowi pełną kontrolę,
+    - wspiera naukę w sposób naturalny i przyjazny.
+
+    Tak narodził się **Language Master**.
+
+    ---
+
+    ### Kontakt i sugestie
+    Jeśli masz pomysł na nową funkcję, chcesz zgłosić błąd lub po prostu podzielić się opinią,
+    możesz napisać do mnie:
+
+    📧 **awilga.ol@wp.pl**
+
+    Bardzo doceniam każdy feedback — to dzięki niemu aplikacja może się rozwijać.
+
+    ---
+
+    ### Podziękowania
+    Dziękuję wszystkim, którzy testowali pierwsze wersje aplikacji i motywowali mnie do dalszej pracy.
+    To dopiero początek — planuję kolejne moduły, ulepszenia i nowe funkcje.
+
+    """)
+
+    st.info("Dziękuję, że korzystasz z Language Master. Życzę Ci pięknej i skutecznej nauki!")
+
+# ---------------------------------------------------------
+# TAB 9 — INFORMACJE
+# ---------------------------------------------------------
+
+with tab9:
     st.header("Informacje o aplikacji")
 
     st.write(

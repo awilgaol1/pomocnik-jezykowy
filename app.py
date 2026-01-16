@@ -129,7 +129,7 @@ def sm2_update(ease_factor, interval, repetitions, quality):
 
 st.title("Language Master — Twoje centrum nauki języków")
 
-tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8 = st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6, tab7, tab8, tab9 = st.tabs([
     "Tłumaczenie + słówka",
     "Fiszki",
     "Quiz Q3",
